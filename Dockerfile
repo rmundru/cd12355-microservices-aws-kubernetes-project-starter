@@ -1,7 +1,6 @@
 # Use an official Python runtime as a parent image
 FROM python:3.12-slim
 
-
 # Set the working directory in the container
 WORKDIR /app
 
@@ -19,11 +18,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5153
 
 #environmental varaiables
-ENV DB_USERNAME=myuser
-ENV DB_PASSWORD=mypassword
-ENV DB_HOST=127.0.0.1
-ENV DB_PORT=5433
-ENV DB_NAME=mydatabase
+ENV DB_USERNAME=postgres
+ENV DB_PASSWORD=test
+ENV DB_HOST=postgres
+ENV DB_PORT=5432
+ENV DB_NAME=postgres
 
 # Run app.py when the container launches
 CMD ["python", "app.py"]

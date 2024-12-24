@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgresql-pvc
+  name: data-psql-test-postgresql-0
 spec:
-  storageClassName: gp2
+  storageClassName: manual
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: 10Gi
