@@ -1,5 +1,4 @@
 version: 0.2
-
 phases:
   pre_build:
     commands:
@@ -8,11 +7,24 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - echo Building the Docker image...          
-      - docker build -t $IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER .
-      - docker tag $IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER      
+
+      # Build the application image
+      - echo Building the app Docker image...
+      - docker build -t $APP_IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER .
+      - docker tag $APP_IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$APP_IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER
+
+      # Build the postgres image
+      - echo Building the postgres Docker image...
+      - docker pull postgres:latest
+      - docker tag postgres:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$POSTGRES_IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER
   post_build:
     commands:
       - echo Build completed on `date`
-      - echo Pushing the Docker image...
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER
+
+      # Push the application image
+      - echo Pushing the app Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$APP_IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER
+
+      # Push the postgres image
+      - echo Pushing the postgres Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$POSTGRES_IMAGE_REPO_NAME:$CODEBUILD_BUILD_NUMBER
